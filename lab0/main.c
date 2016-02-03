@@ -34,7 +34,7 @@ typedef enum stateTypeEnum{
 } stateType;
 
 //TODO: Use volatile variables that change within interrupts
-volatile int part = PART1;               //Sets the lab part
+volatile int part = PART2;               //Sets the lab part
 volatile int direction = FORWARD;
 volatile stateType state = led1;
 volatile stateType lastLED;
@@ -54,90 +54,85 @@ int main() {
         
         //TODO: Implement a state machine to create the desired functionality
         switch(part){
-                case(PART1):            //Part 1 of lab
-                    switch(state){
-                        case(led1):
-                            turnOnLED(LED_1);
-                            lastLED = state;
-                            state = wait;
-                            break;
-                        case(led2):
-                            turnOnLED(LED_2);
-                            lastLED = state;
-                            state = wait;
-                            break;
-                        case(led3):
-                            turnOnLED(LED_3);
-                            lastLED = state;
-                            state = wait;
-                            break;
-                        case(wait):
-                            TMR1 = 0;
-                            T1CONbits.ON = 1;       //Turn timer on
-                            break;
-                            
-                    
-                    }
-                
-                case(PART2):
-                    switch(state){
-                        case(led1):
-                            turnOnLED(LED_1);
-                            lastLED = state;
-                            state = wait;
-                            break;
-                        case(led2):
-                            turnOnLED(LED_2);
-                            lastLED = state;
-                            state = wait;
-                            break;
-                        case(led3):
-                            turnOnLED(LED_3);
-                            lastLED = state;
-                            state = wait;
-                            break;
-                        case(buttonPressLt1):
-                            direction = FORWARD;
-                            T1CONbits.ON = 1;           //Turn TMR2 on
-                            //if clock goes passed
-                            /*Will wait until button is released:
-                                if released before 1s, will set direction to FORWARD
-                                and then move to buttonReleased
-                                else will set direction to BACKWARD and move to 
-                                buttonPress1
-                            */
-                            break;
-                        case(buttonPress1):
-                            direction = BACKWARD;
-                            /*Will just hang out and wait for the button to be released
-                                then will move to buttonReleased state
-                            */
-                            break;
-                        case(buttonReleased):
-                            delayMS(5);
-                            /*Will wait until the counter has stabilized and then will move
-                                to the next LED in the sqeuence based on lastLED and direction 
-                            */
-                            break;
-                        case(wait):
-                            delayMS(1);
-                            state = buttonPressLt1;
-                            break;
-                        case(wait2):
-                            //stuff
-                            break;
-                        case(debouncePress):
-                            //Will wait un
-                            break; 
-                        case(debounceRelease):
-                            //stuff
-                            break; 
-                        case(debounceRelease2):
-                            //stuff
-                            break; 
-                    }
-                break;
-                
+            case(PART1):            //Part 1 of lab
+                switch(state){
+                    case(led1):
+                        turnOnLED(LED_1);
+                        lastLED = state;
+                        state = wait;
+                        break;
+                    case(led2):
+                        turnOnLED(LED_2);
+                        lastLED = state;
+                        state = wait;
+                        break;
+                    case(led3):
+                        turnOnLED(LED_3);
+                        lastLED = state;
+                        state = wait;
+                        break;
+                    case(wait):
+                        T1CONbits.ON = 1;       //Turn timer on
+                        break;
+
+
+                }
+
+            case(PART2):
+                switch(state){
+                    case(led1):
+                        turnOnLED(LED_1);
+                        lastLED = state;
+                        //state = wait;
+                        break;
+                    case(led2):
+                        turnOnLED(LED_2);
+                        lastLED = state;
+                        //state = wait;
+                        break;
+                    case(led3):
+                        turnOnLED(LED_3);
+                        lastLED = state;
+                        //state = wait;
+                        break;
+                    case(buttonPressLt1):
+                        direction = FORWARD;
+                        T1CONbits.ON = 1;           //Turn TMR2 on
+                        //if clock goes passed
+                        /*Will wait until button is released:
+                            if released before 1s, will set direction to FORWARD
+                            and then move to buttonReleased
+                            else will set direction to BACKWARD and move to 
+                            buttonPress1
+                        */
+                        break;
+                    case(buttonPress1):
+                        direction = BACKWARD;
+                        /*Will just hang out and wait for the button to be released
+                            then will move to buttonReleased state
+                        */
+                        break;
+                    case(buttonReleased):
+                        delayMs(5);
+                        /*Will wait until the counter has stabilized and then will move
+                            to the next LED in the sequence based on lastLED and direction 
+                        */
+                        break;
+                    case(wait):
+                        delayMs(5);
+                        state = buttonPressLt1;
+                        break;
+                    case(wait2):
+                        //stuff
+                        break;
+                    case(debouncePress):
+                        //Will wait un
+                        break; 
+                    case(debounceRelease):
+                        //stuff
+                        break; 
+                }
+            break;
         }
         
     }
@@ -183,15 +178,17 @@ void __ISR(_TIMER_1_VECTOR, IPL3SRS) _T1Interrupt()
         IFS0bits.T2IF = 0;                                      //Puts flag down
     }
     else if(IFS1bits.CNDIF == 1){
-        if(state == (led1 or led2 or led3)){
-            state = wait;
-            
+        if(part == PART1){}
+        else if(part == PART2){
+            if(state == (led1 | led2 | led3)){
+                state = wait;
+
+            }
+            else if(state == (buttonPressLt1 | buttonPress1)){
+                state = buttonReleased;
+            }
         }
-        else if(state == (buttonPressLt1 or buttonPress1)){
-            state = buttonReleased;
-        }
-        
-        
+        IFS1bits.CNDIF = 0;
     }
 }
 
