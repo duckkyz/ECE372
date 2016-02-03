@@ -1,39 +1,40 @@
 /* 
  * File:   led.c
- * Author: Sean Kenney
+ * Author: Ben Johnson
  *
- * Created on August 27, 2015, 3:15 PM
+ * Created on February 1, 2016, 5:17 PM
  */
 
 #include <xc.h>
 #include "led.h"
 
-#define INPUT 1
 #define OUTPUT 0
+#define INPUT 1
 
+#define OFF 0
+#define ON 1
 
-void initLEDs()
-{
+void initLEDs(){
     TRISDbits.TRISD0 = OUTPUT;
     TRISDbits.TRISD1 = OUTPUT;
     TRISDbits.TRISD2 = OUTPUT;
 }
 
-void turnOnLED(int led)
-{
+void turnOnLED(int led){
     if(led == 1){
-        LATDbits.LATD0 = 1;
-        LATDbits.LATD1 = 0;
-        LATDbits.LATD2 = 0;
+        LATDbits.LATD0 = ON;
+        LATDbits.LATD1 = OFF;
+        LATDbits.LATD2 = OFF;
     }
-    else if(led == 2){
-        LATDbits.LATD0 = 0;
-        LATDbits.LATD1 = 1;
-        LATDbits.LATD2 = 0;        
+    else if (led == 2){
+        LATDbits.LATD0 = OFF;
+        LATDbits.LATD1 = ON;
+        LATDbits.LATD2 = OFF;
     }
-    else{
-        LATDbits.LATD0 = 0;
-        LATDbits.LATD1 = 0;
-        LATDbits.LATD2 = 1;
+    else if (led == 3){
+        LATDbits.LATD0 = OFF;
+        LATDbits.LATD1 = OFF;
+        LATDbits.LATD2 = ON;
     }
+    
 }

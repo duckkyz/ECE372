@@ -1,6 +1,6 @@
 /* 
  * File:   interrupt.h
- * Author: Sean Kenney
+ * Author: gvanhoy
  *
  * Created on August 27, 2015, 3:32 PM
  */

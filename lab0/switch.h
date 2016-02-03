@@ -1,6 +1,6 @@
 /* 
  * File:   switch.h
- * Author: Sean Kenney
+ * Author: gvanhoy
  *
  * Created on August 27, 2015, 3:12 PM
  */
