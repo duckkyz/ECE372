@@ -30,7 +30,11 @@
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
+<<<<<<< HEAD
     <Elem>../../../../../Program Files (x86)/Microchip/xc32/v1.40/pic32mx/include</Elem>
+=======
+    <Elem>/Applications/microchip/xc32/v1.40/pic32mx/include</Elem>
+>>>>>>> 9f1d9e5ff0557f20fe22e0bd26c382024f0ef8fc
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -43,7 +47,11 @@
         <platformTool>PKOBSKDEPlatformTool</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>1.40</languageToolchainVersion>
+<<<<<<< HEAD
         <platform>3</platform>
+=======
+        <platform>4</platform>
+>>>>>>> 9f1d9e5ff0557f20fe22e0bd26c382024f0ef8fc
       </toolsSet>
       <compileType>
         <linkerTool>
