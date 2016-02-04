@@ -23,6 +23,9 @@
 #define LED_2 2
 #define LED_3 3
 
+#define PRESSED 0
+#define RELEASED 1
+
 #define FORWARD 0
 #define BACKWARD 1
 
@@ -30,7 +33,7 @@
 
 //TODO: Define states of the state machine
 typedef enum stateTypeEnum{
-    led1, led2, led3, wait, wait2, debouncePress, debounceRelease, buttonPressLt1, buttonPress1, buttonReleased
+    led1, led2, led3, wait, wait2, wait3, debounceRelease, buttonPressLt1, buttonPress1, buttonReleased
 } stateType;
 
 //TODO: Use volatile variables that change within interrupts
@@ -82,22 +85,26 @@ int main() {
                 switch(state){
                     case(led1):
                         turnOnLED(LED_1);
-                        lastLED = state;
-                        //state = wait;
+                        lastLED = led1;
+                        state = wait2;
                         break;
                     case(led2):
                         turnOnLED(LED_2);
-                        lastLED = state;
-                        //state = wait;
+                        lastLED = led2;
+                        state = wait2;
                         break;
                     case(led3):
                         turnOnLED(LED_3);
-                        lastLED = state;
-                        //state = wait;
+                        lastLED = led3;
+                        state = wait2;
                         break;
                     case(buttonPressLt1):
                         direction = FORWARD;
-                        T1CONbits.ON = 1;           //Turn TMR2 on
+                        T1CONbits.ON = 1;           //Turn TMR1 on
+                        if(SWITCH1 == RELEASED){
+                            state = buttonReleased;
+                            T1CONbits.ON = 0;        //Turn TMR1 off
+                        }
                         //if clock goes passed
                         /*Will wait until button is released:
                             if released before 1s, will set direction to FORWARD
@@ -108,12 +115,16 @@ int main() {
                         break;
                     case(buttonPress1):
                         direction = BACKWARD;
-                        /*Will just hang out and wait for the button to be released
+                        if(SWITCH1 == RELEASED) state = buttonReleased;
+                            /*Will just hang out and wait for the button to be released
                             then will move to buttonReleased state
                         */
                         break;
                     case(buttonReleased):
                         delayMs(5);
+                        T2CONbits.ON = 1;           //Turn timer on
+
+                        state = wait3;
                         /*Will wait until the counter has stabilized and then will move
                             to the next LED in the sequence based on lastLED and direction 
                         */
@@ -123,9 +134,9 @@ int main() {
                         state = buttonPressLt1;
                         break;
                     case(wait2):
-                        //stuff
+                        if(SWITCH1 == PRESSED) state = buttonPressLt1;
                         break;
-                    case(debouncePress):
+                    case(wait3):
                         //Will wait un
                         break; 
                     case(debounceRelease):
@@ -141,7 +152,7 @@ int main() {
 }
 
 
-void __ISR(_TIMER_1_VECTOR, IPL3SRS) _T1Interrupt()
+void __ISR(_TIMER_1_VECTOR, IPL3SRS) _TInterrupt()
 {
     if(IFS0bits.T1IF == 1){
         if(part == PART1){
@@ -177,7 +188,23 @@ void __ISR(_TIMER_1_VECTOR, IPL3SRS) _T1Interrupt()
         T2CONbits.ON = 0;                                       //Turns off timer
         IFS0bits.T2IF = 0;                                      //Puts flag down
     }
-    else if(IFS1bits.CNDIF == 1){
+//    else if(IFS1bits.CNDIF == 1){
+//        if(part == PART1){}
+//        else if(part == PART2){
+//            if(state == (led1 | led2 | led3)){
+//                state = wait;
+//
+//            }
+//            else if(state == (buttonPressLt1 | buttonPress1)){
+//                state = buttonReleased;
+//            }
+//        }
+//        IFS1bits.CNDIF = 0;
+//    }
+}
+/*
+void __ISR(_CHANGE_NOTICE_VECTOR, IPL2SRS) _CNInterrupt( void ){
+    if(IFS1bits.CNDIF == 1){
         if(part == PART1){}
         else if(part == PART2){
             if(state == (led1 | led2 | led3)){
@@ -186,9 +213,12 @@ void __ISR(_TIMER_1_VECTOR, IPL3SRS) _T1Interrupt()
             }
             else if(state == (buttonPressLt1 | buttonPress1)){
                 state = buttonReleased;
+                T1CONbits.ON = 0;           //Turn TMR2 off
+                IFS0bits.T1IF = 0;          //Lower T1 flag
+
             }
         }
         IFS1bits.CNDIF = 0;
     }
-}
+}*/
 

@@ -21,7 +21,10 @@ void initTimer2(){
     TMR2 = 0;              //Clears TMR2
     T2CONbits.TCKPS = 0;    //Sets the pre-scalar
     T2CONbits.TCS = 0;      //Sets up the oscillator
+    IEC0bits.T2IE = 1;      // Enable the interrupt
     IFS0bits.T2IF = 0;      //Lowers flag
+    IPC2bits.T2IP = 4;      // Configure the Interrupt Priority
+
     
 }
 
@@ -32,7 +35,7 @@ void delayMs(int delay){
     TMR2 = 0;                   //Clears TMR2
     PR2 = delay*624;            //Sets the delay as a multiple of ms
     IFS0bits.T2IF = 0;          //Puts down flag
-    T2CONbits.ON = 1;           //Turn timer on
+    //T2CONbits.ON = 1;           //Turn timer on
     //while(IFS0bits.T2IF == 0){} //While the timer isn't done
     //T2CONbits.ON = 0;           //Turn timer off
     //IFS0bits.T2IF = 0;          //Puts flag down
