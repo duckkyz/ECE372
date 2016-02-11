@@ -37,11 +37,13 @@ void delayMs(int delay){
     // that is delay amount of ms.
     
     TMR2 = 0;                   //Clears TMR2
-    PR2 = delay*39;            //Sets the delay as a multiple of ms
+    PR2 = delay*625;            //Sets the delay as a multiple of ms
     IFS0bits.T2IF = 0;          //Puts down flag
-    T2CONbits.ON = 1;           //Turn timer on
+    T2CONbits.ON = 1;  
+    //IEC1bits.CNGIE = 0;         //Turn timer on
     while(IFS0bits.T2IF == 0); //While the timer isn't done
     IFS0bits.T2IF = 0;
+    //IEC1bits.CNGIE = 1;
     T2CONbits.ON = 0;           //Turn timer off
 }
 /*

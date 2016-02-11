@@ -31,8 +31,8 @@
 #define RELEASED 1
 #define PUSHED 0
 
-//#define SWITCH PORTGbits.RG13
-#define SWITCH PORTDbits.RD6
+#define SWITCH PORTGbits.RG13
+//#define SWITCH PORTDbits.RD6
 /* Please note that the configuration file has changed from lab 0.
  * the oscillator is now of a different frequency.
  */
@@ -59,12 +59,15 @@ int main(void)
             case(run):
                 turnOnLED(RUNLED);
                 lastState = run;
+                delayMs(10);
                 break;
             case(stop):
                 turnOnLED(STOPLED);
                 lastState = stop;
+                delayMs(10);
                 break;
             case(debounce):
+                //CNENDbits.CNIED6 = 0;      //CN for the pin
                 delayMs(5);
                 if (buttonState == PUSHED){
                     if(lastState == run) state = stop;
@@ -76,6 +79,7 @@ int main(void)
                     state = lastState;
                     buttonState = 3;
                 }
+                //CNENDbits.CNIED6 = 1;      //CN for the pin
                 break;
         }
     }
@@ -87,5 +91,5 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
     if(SWITCH == PUSHED) buttonState = PUSHED;
     else if(SWITCH == RELEASED) buttonState = RELEASED;
     state = debounce;
-    IFS1bits.CNDIF = 0;
+    IFS1bits.CNGIF = 0;
 }
