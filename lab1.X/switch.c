@@ -27,7 +27,7 @@ void initSW2(){
     CNPUDbits.CNPUD6 = 1; //Enable PUR
     
     IPC8bits.CNIP = 7;
-    //IPC8bits.CNIS = 2;
-    //IFS1bits.CNGIF = 0;
+    IPC8bits.CNIS = 2;
+    IFS1bits.CNGIF = 0;
     
 }

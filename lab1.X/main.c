@@ -9,11 +9,11 @@
 
 #include <xc.h>
 #include <sys/attribs.h>
+#include "config.h"
 #include "leds.h"
 #include "interrupt.h"
 #include "switch.h"
 #include "timer.h"
-#include "config.h"
 
 
 #define OUTPUT 0
@@ -38,16 +38,16 @@
  */
 
 typedef enum stateTypeEnum{
-    run, stop, debounce
+    run, stop, debouncePush, debounceRelease
 } stateType;
 
-volatile stateType state = run;
+volatile stateType state = stop;
 volatile stateType lastState;
 volatile int buttonState;
 
 int main(void)
 {
-    SYSTEMConfigPerformance(10000000);
+    SYSTEMConfigPerformance(40000000);
     enableInterrupts();
     
     initLEDs();
@@ -58,20 +58,22 @@ int main(void)
         switch(state){
             case(run):
                 turnOnLED(RUNLED);
-                lastState = state;
+                lastState = run;
                 break;
             case(stop):
                 turnOnLED(STOPLED);
-                lastState = state;
+                lastState = stop;
                 break;
-            case(debounce):
+            case(debouncePush):
                 delayUs(5);
-                if(buttonState == PUSHED){
-                    if(lastState == run) state = stop;
-                    else state = run;
-                }
-                else if(buttonState == RELEASED) state = lastState;
-                else state = lastState;
+                if(lastState == run) state = stop;
+                else if(lastState == stop) state = run;
+                buttonState = 2;
+                break;
+            case(debounceRelease):
+                delayUs(5);
+                state = lastState;
+                buttonState = 3;
                 break;
         }
     }
@@ -80,7 +82,13 @@ int main(void)
 }
 
 void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
-    buttonState = SWITCH;
+    if(SWITCH == PUSHED){
+        buttonState = PUSHED;
+        state = debouncePush;
+    }
+    else if(SWITCH == RELEASED){
+        buttonState = RELEASED;
+        state = debounceRelease;
+    }
     IFS1bits.CNDIF = 0;
-    state = debounce;
 }
