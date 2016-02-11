@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=lab0
+PROJECTNAME=lab0_working_backup
 
 # Active Configuration
 DEFAULTCONF=default

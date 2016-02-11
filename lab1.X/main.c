@@ -38,20 +38,20 @@
  */
 
 typedef enum stateTypeEnum{
-    run, stop, debouncePush, debounceRelease
+    run, stop, debounce
 } stateType;
 
-volatile stateType state = stop;
+volatile stateType state = run;
 volatile stateType lastState;
 volatile int buttonState;
 
 int main(void)
 {
-    SYSTEMConfigPerformance(40000000);
+    SYSTEMConfigPerformance(10000000);
     enableInterrupts();
     
     initLEDs();
-    //initTimer2();
+    initTimer2();
     initSW2();
     
     while(1){
@@ -64,16 +64,18 @@ int main(void)
                 turnOnLED(STOPLED);
                 lastState = stop;
                 break;
-            case(debouncePush):
-                delayUs(5);
-                if(lastState == run) state = stop;
-                else if(lastState == stop) state = run;
-                buttonState = 2;
-                break;
-            case(debounceRelease):
-                delayUs(5);
-                state = lastState;
-                buttonState = 3;
+            case(debounce):
+                delayMs(5);
+                if (buttonState == PUSHED){
+                    if(lastState == run) state = stop;
+                    else if(lastState == stop) state = run;
+                    buttonState = 2;
+                }
+                else if(buttonState == RELEASED){
+                    delayMs(5);
+                    state = lastState;
+                    buttonState = 3;
+                }
                 break;
         }
     }
@@ -82,13 +84,8 @@ int main(void)
 }
 
 void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
-    if(SWITCH == PUSHED){
-        buttonState = PUSHED;
-        state = debouncePush;
-    }
-    else if(SWITCH == RELEASED){
-        buttonState = RELEASED;
-        state = debounceRelease;
-    }
+    if(SWITCH == PUSHED) buttonState = PUSHED;
+    else if(SWITCH == RELEASED) buttonState = RELEASED;
+    state = debounce;
     IFS1bits.CNDIF = 0;
 }
