@@ -14,6 +14,28 @@
 # You can invoke make with the values of the macros:
 # $ makeMP_CC="/opt/microchip/mplabc30/v3.30c/bin/pic30-gcc" ...  
 #
+<<<<<<< HEAD
+SHELL=cmd.exe
+PATH_TO_IDE_BIN=C:/Program Files (x86)/Microchip/MPLABX/v3.20/mplab_ide/mplab_ide/modules/../../bin/
+# Adding MPLAB X bin directory to path.
+PATH:=C:/Program Files (x86)/Microchip/MPLABX/v3.20/mplab_ide/mplab_ide/modules/../../bin/:$(PATH)
+# Path to java used to run MPLAB X when this makefile was created
+MP_JAVA_PATH="C:\Program Files (x86)\Microchip\MPLABX\v3.20\sys\java\jre1.8.0_65/bin/"
+OS_CURRENT="$(shell uname -s)"
+MP_CC="C:\Program Files (x86)\Microchip\xc32\v1.40\bin\xc32-gcc.exe"
+MP_CPPC="C:\Program Files (x86)\Microchip\xc32\v1.40\bin\xc32-g++.exe"
+# MP_BC is not defined
+MP_AS="C:\Program Files (x86)\Microchip\xc32\v1.40\bin\xc32-as.exe"
+MP_LD="C:\Program Files (x86)\Microchip\xc32\v1.40\bin\xc32-ld.exe"
+MP_AR="C:\Program Files (x86)\Microchip\xc32\v1.40\bin\xc32-ar.exe"
+DEP_GEN=${MP_JAVA_PATH}java -jar "C:/Program Files (x86)/Microchip/MPLABX/v3.20/mplab_ide/mplab_ide/modules/../../bin/extractobjectdependencies.jar"
+MP_CC_DIR="C:\Program Files (x86)\Microchip\xc32\v1.40\bin"
+MP_CPPC_DIR="C:\Program Files (x86)\Microchip\xc32\v1.40\bin"
+# MP_BC_DIR is not defined
+MP_AS_DIR="C:\Program Files (x86)\Microchip\xc32\v1.40\bin"
+MP_LD_DIR="C:\Program Files (x86)\Microchip\xc32\v1.40\bin"
+MP_AR_DIR="C:\Program Files (x86)\Microchip\xc32\v1.40\bin"
+=======
 PATH_TO_IDE_BIN=/Applications/microchip/mplabx/v3.20/mplab_ide.app/Contents/Resources/mplab_ide/mplab_ide/modules/../../bin/
 # Adding MPLAB X bin directory to path.
 PATH:=/Applications/microchip/mplabx/v3.20/mplab_ide.app/Contents/Resources/mplab_ide/mplab_ide/modules/../../bin/:$(PATH)
@@ -33,4 +55,5 @@ MP_CPPC_DIR="/Applications/microchip/xc32/v1.40/bin"
 MP_AS_DIR="/Applications/microchip/xc32/v1.40/bin"
 MP_LD_DIR="/Applications/microchip/xc32/v1.40/bin"
 MP_AR_DIR="/Applications/microchip/xc32/v1.40/bin"
+>>>>>>> 9f1d9e5ff0557f20fe22e0bd26c382024f0ef8fc
 # MP_BC_DIR is not defined

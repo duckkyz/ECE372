@@ -19,7 +19,11 @@ endif
 endif
 
 # Environment
+<<<<<<< HEAD
+MKDIR=gnumkdir -p
+=======
 MKDIR=mkdir -p
+>>>>>>> 9f1d9e5ff0557f20fe22e0bd26c382024f0ef8fc
 RM=rm -f 
 MV=mv 
 CP=cp 
@@ -174,7 +178,11 @@ else
 dist/${CND_CONF}/${IMAGE_TYPE}/lab0.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk   
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
 	${MP_CC} $(MP_EXTRA_LD_PRE)  -mprocessor=$(MP_PROCESSOR_OPTION)  -o dist/${CND_CONF}/${IMAGE_TYPE}/lab0.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}            -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map",--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml
+<<<<<<< HEAD
+	${MP_CC_DIR}\\xc32-bin2hex dist/${CND_CONF}/${IMAGE_TYPE}/lab0.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} 
+=======
 	${MP_CC_DIR}/xc32-bin2hex dist/${CND_CONF}/${IMAGE_TYPE}/lab0.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} 
+>>>>>>> 9f1d9e5ff0557f20fe22e0bd26c382024f0ef8fc
 endif
 
 
@@ -193,7 +201,11 @@ endif
 # Enable dependency checking
 .dep.inc: .depcheck-impl
 
+<<<<<<< HEAD
+DEPFILES=$(shell mplabwildcard ${POSSIBLE_DEPFILES})
+=======
 DEPFILES=$(shell "${PATH_TO_IDE_BIN}"mplabwildcard ${POSSIBLE_DEPFILES})
+>>>>>>> 9f1d9e5ff0557f20fe22e0bd26c382024f0ef8fc
 ifneq (${DEPFILES},)
 include ${DEPFILES}
 endif
