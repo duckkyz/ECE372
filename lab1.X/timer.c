@@ -16,7 +16,7 @@ void initTimer2(){
     
 }
 
-void delayUs(unsigned int delay){
+void delayMs(unsigned int delay){
     TMR2 = 0;                   //Clears TMR2
     IFS0bits.T2IF = 0;      // Put the flag down
     PR2 = delay*39;            //Sets the delay as a multiple of Us
