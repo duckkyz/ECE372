@@ -40,14 +40,15 @@ typedef enum stateTypeEnum{
     run, stop, debouncePush, debounceRelease, wait
 } stateType;
 
+volatile int dummyVariable = 0;
 volatile stateType state = run;
-volatile stateType lastState;
+volatile stateType lastState = run;
+volatile stateType nextState = stop ;
 
 int main(void)
 {
     SYSTEMConfigPerformance(10000000);
     enableInterrupts();
-    
     initLEDs();
     initTimer2();
     initSW2();
@@ -57,27 +58,29 @@ int main(void)
             case(run):
                 turnOnLED(RUNLED);
                 lastState = run;
-                state = wait;
                 break;
             case(stop):
                 turnOnLED(STOPLED);
                 lastState = stop;
-                state = wait;
                 break;
             case(debouncePush):
-                CNENGbits.CNIEG13 = 0;      //CN for the pin
-                delayMs(5);
-                if(lastState == run) state = stop;
-                else if(lastState == stop) state = run;
-                CNENGbits.CNIEG13 = 1;      //CN for the pin
+                //CNENGbits.CNIEG13 = 0;      //CN for the pin
+                //delayMs(5);
+                state = wait;
+                ///if(lastState == run) state = stop;
+                //else if(lastState == stop) state = run;
+                //CNENGbits.CNIEG13 = 1;      //CN for the pin
                 break;
             case(debounceRelease):
-                CNENGbits.CNIEG13 = 0;      //CN for the pin
-                delayMs(5);
-                state = lastState;
-                CNENGbits.CNIEG13 = 1;      //CN for the pin
+                //CNENGbits.CNIEG13 = 0;      //CN for the pin
+                //delayMs(5);
+                state = nextState;
+                //state = lastState;
+                //CNENGbits.CNIEG13 = 1;      //CN for the pin
                 break;
             case(wait):
+                //if(SWITCH == PUSHED) state = debouncePush;
+                //else if(SWITCH == RELEASED) state = debounceRelease;
                 break;
         }
     }
@@ -86,7 +89,17 @@ int main(void)
 }
 
 void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
+    dummyVariable = PORTGbits.RG13 = 1;
     IFS1bits.CNGIF = 0;
-    if(SWITCH == RELEASED) state = debounceRelease;
-    else if(SWITCH == PUSHED) state = debouncePush;
+    if(SWITCH == PUSHED) {
+        if(lastState == run) nextState = stop;
+        else if(lastState == stop) nextState = run;
+        state = debouncePush;
+    }
+        
+    else if(SWITCH == RELEASED){ 
+        //nextState = lastState;
+        state = debounceRelease;
+        
+    }
 }

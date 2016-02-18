@@ -17,10 +17,10 @@
 
 void initSwitch1(){
     //TODO: Initialize switch 1
-    TRISDbits.TRISD6 = INPUT;   //SW1 = input
-    CNCONDbits.ON = ENABLED;    //CN on
-    CNENDbits.CNIED6 = ENABLED; // Enable CN interrupt for pin
-    IEC1bits.CNDIE = ENABLED;   // Enable overall CN Interrupt
-    IFS1bits.CNDIF = DOWN;      // Put Interrupt flag down
-    CNPUDbits.CNPUD6 = ENABLED; //Enable PUR   
+    TRISGbits.TRISG13 = INPUT;   //SW1 = input
+    CNCONGbits.ON = ENABLED;    //CN on
+    CNENGbits.CNIEG13 = ENABLED; // Enable CN interrupt for pin
+    IEC1bits.CNGIE = ENABLED;   // Enable overall CN Interrupt
+    IFS1bits.CNGIF = DOWN;      // Put Interrupt flag down
+    CNPUGbits.CNPUG13 = ENABLED; //Enable PUR   
 }
