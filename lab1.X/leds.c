@@ -1,9 +1,9 @@
 /*
-* File:   leds.c
-* Author: 
-*
-* Created on December 27, 2014, 1:31 PM
-*/
+ * File:   leds.c
+ * Authors: Ben Johnson
+ *
+ * Created on Feb 5, 2016
+ */
 
 #include <xc.h>
 #include "leds.h"
@@ -17,19 +17,17 @@
 #define OFF 0
 #define ON 1
 
+#define RUNLED_TRIS TRISGbits.TRISG12
+#define STOPLED_TRIS TRISGbits.TRISG14
+
 #define RUNLED LATGbits.LATG12
 #define STOPLED LATGbits.LATG14
-//#define RUNLED LATDbits.LATD0
-//#define STOPLED LATDbits.LATD1
 
 void initLEDs(){
-    TRISGbits.TRISG12 = OUTPUT;
-    TRISGbits.TRISG14 = OUTPUT; 
-    
-    ODC_RUN = 1;
-    ODC_STOP = 1;
-    //TRISDbits.TRISD0 = OUTPUT;
-    //TRISDbits.TRISD1 = OUTPUT; 
+    RUNLED_TRIS = OUTPUT;
+    STOPLED_TRIS = OUTPUT; 
+    ODC_RUN = ON;
+    ODC_STOP = ON;
 }
 
 void turnOnLED(int led){
