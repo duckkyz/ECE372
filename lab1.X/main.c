@@ -91,7 +91,7 @@ int main(void)
     return 0;
 }
 
-void __ISR(_CHANGE_NOTICE_VECTOR, IPL4SRS) _CNInterrupt(void){
+void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
     if(SWITCH == PUSHED){
         //buttonState = PUSHED;
         state = debouncePush;
