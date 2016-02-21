@@ -1,8 +1,8 @@
 /*
  * File:   switch.c
- * Author: Garrett
+ * Authors: Ben Johnson
  *
- * Created on September 19, 2015, 10:46 AM
+ * Created on Feb 5, 2016
  */
 
 #include <xc.h>
@@ -13,6 +13,7 @@
 
 
 void initSW2(){
+<<<<<<< HEAD
     TRISGbits.TRISG13 = INPUT;  
     CNCONGbits.ON = 1;          //G Change Notification on
     CNENGbits.CNIEG13 = 1;      //CN for the pin
@@ -30,5 +31,16 @@ void initSW2(){
     IPC8bits.CNIP = 7;
     IPC8bits.CNIS = 2;
     IFS1bits.CNGIF = 0;
+=======
+    
+    TRISGbits.TRISG13 = INPUT;  
+    CNCONGbits.ON = 1;          //G Change Notification on
+    CNENGbits.CNIEG13 = 1;      //CN for the pin
+    IEC1bits.CNGIE = 1;         //Enables the interrupt
+    IFS1bits.CNGIF = 0;         //Lowers the flag
+    CNPUGbits.CNPUG13 = 1;      //Puts the pull up resistor on
+    IPC8bits.CNIP = 7;          //Sets the priority
+    IPC8bits.CNIS = 2;          //Sets the secondary Priority
+>>>>>>> Lab0/master
     
 }

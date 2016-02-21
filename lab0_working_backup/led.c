@@ -15,26 +15,26 @@
 #define ON 1
 
 void initLEDs(){
-    TRISDbits.TRISD0 = OUTPUT;
-    TRISDbits.TRISD1 = OUTPUT;
-    TRISDbits.TRISD2 = OUTPUT;
+    TRISGbits.TRISG12 = OUTPUT;
+    TRISGbits.TRISG14 = OUTPUT;
+    //TRISGbits.TRISD2 = OUTPUT;
 }
 
 void turnOnLED(int led){
     if(led == 1){
-        LATDbits.LATD0 = ON;
-        LATDbits.LATD1 = OFF;
-        LATDbits.LATD2 = OFF;
+        LATGbits.LATG12 = ON;
+        LATGbits.LATG14 = OFF;
+        //LATDbits.LATD2 = OFF;
     }
     else if (led == 2){
-        LATDbits.LATD0 = OFF;
-        LATDbits.LATD1 = ON;
-        LATDbits.LATD2 = OFF;
+        LATGbits.LATG12 = OFF;
+        LATGbits.LATG14 = ON;
+        //LATDbits.LATD2 = OFF;
     }
-    else if (led == 3){
-        LATDbits.LATD0 = OFF;
-        LATDbits.LATD1 = OFF;
-        LATDbits.LATD2 = ON;
-    }
+    //else if (led == 3){
+     //   LATDbits.LATD0 = OFF;
+      //  LATDbits.LATD1 = OFF;
+       // LATDbits.LATD2 = ON;
+    //}
     
 }

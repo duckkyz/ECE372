@@ -29,7 +29,7 @@
 #define RELEASED 1
 #define PUSHED 0
 
-#define SWITCH1 PORTDbits.RD6
+#define SWITCH1 PORTGbits.RG13
 
 //TODO: Define states of the state machine
 typedef enum stateTypeEnum{
@@ -92,11 +92,11 @@ int main() {
                         lastLED = state;
                         state = wait;
                         break;
-                    case(led3):
+                    /*case(led3):
                         turnOnLED(LED_3);
                         lastLED = state;
                         state = wait;
-                        break;
+                        break;*/
                     case(buttonPressLt1):
                         direction = FORWARD;
                         T1CONbits.ON = 1;           //Turn TMR1 on
@@ -126,10 +126,10 @@ int main() {
                     case(wait3):
                         if(lastLED == led1){
                             if(direction == FORWARD) state = led2;
-                            else if(direction == BACKWARD) state = led3;
+                            else if(direction == BACKWARD) state = led2;
                         }
                         else if(lastLED == led2){
-                            if(direction == FORWARD) state = led3;
+                            if(direction == FORWARD) state = led1;
                             else if(direction == BACKWARD) state = led1;
                         }
                         else if(lastLED == led3){
@@ -148,6 +148,13 @@ int main() {
 }
 
 
+void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(){
+    dummyVariable=PORTG;
+    IFS1bits.CNGIF = 0;
+    if(SWITCH == PUSHED) state = debouncePush;
+    else if(SWITCH == RELEASED) state = debounceRelease;
+}
+/*
 void __ISR(_TIMER_1_VECTOR, IPL3SRS) _T1Interrupt(){
     if(IFS0bits.T1IF == 1){
         if(part == PART1){
@@ -161,7 +168,7 @@ void __ISR(_TIMER_1_VECTOR, IPL3SRS) _T1Interrupt(){
         }
         T1CONbits.ON = 0;                                       //Turn off timer
         IFS0bits.T1IF = 0;                                      //Puts flag down
-    }
+    }*/
 /*    else if(IFS0bits.T2IF == 1){
         if(part == PART1){}
         else if(part == PART2){
